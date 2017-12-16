@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package api;
+
+enum CallbackModel {
+  IMMEDIATE = 0;
+  EVOKED = 1;
+}
+
+message ConnectRequest {
+    CallbackModel callback_model = 1;
+    string local_settings = 2;
+}
+message ConnectResponse {
+    
+    enum ConnectError {
+        CONNECTION_FAILED = 0;
+        UNSUPPORTED_CALLBACK_MODEL = 1;
+        INVALID_LOCAL_SETTINGS_DESIGNATOR = 2;
+        RTI_INTERNAL_ERROR = 3;
+    }
+    oneof optional_error {
+        ConnectError error = 1;
+    }
+}
+
+service ConnectService {
+    rpc connect(ConnectRequest) returns (ConnectResponse);
+}
