@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package api;
+
+import public "types.proto";
+
+service TestService {
+    rpc test(HLAHandle) returns (HLAHandle);
+}

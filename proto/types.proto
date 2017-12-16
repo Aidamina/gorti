@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+
+package api;
+
+message HLAHandle {
+    uint64 handle = 1;
+}
