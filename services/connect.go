@@ -6,11 +6,12 @@ import (
 
 	"github.com/aidamina/gorti/api"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 )
 
 // SayHello implements helloworld.GreeterServer
 func (s *services) Connect(ctx context.Context, in *api.ConnectRequest) (*api.ConnectResponse, error) {
-
+	metadata.FromIncomingContext(ctx)
 	if in.GetCallbackModel() == api.CallbackModel_EVOKED {
 		return &api.ConnectResponse{
 				OptionalError: &api.ConnectResponse_Error{
