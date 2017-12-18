@@ -19,7 +19,7 @@ type HLAHandle struct {
 func (m *HLAHandle) Reset()                    { *m = HLAHandle{} }
 func (m *HLAHandle) String() string            { return proto.CompactTextString(m) }
 func (*HLAHandle) ProtoMessage()               {}
-func (*HLAHandle) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*HLAHandle) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 func (m *HLAHandle) GetHandle() uint64 {
 	if m != nil {
@@ -32,9 +32,9 @@ func init() {
 	proto.RegisterType((*HLAHandle)(nil), "api.HLAHandle")
 }
 
-func init() { proto.RegisterFile("types.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("types.proto", fileDescriptor4) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor4 = []byte{
 	// 76 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2e, 0xa9, 0x2c, 0x48,
 	0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4e, 0x2c, 0xc8, 0x54, 0x52, 0xe6, 0xe2,

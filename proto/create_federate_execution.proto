@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package api;
+
+import public "types.proto";
+
+enum LogicalTimeImplementation {
+  HLAfloat64Time = 0;
+  HLAinteger64Time = 1;
+}
+
+message CreateFederateExecutionRequest {
+    string federation_execution_name = 1;
+    repeated string fom_module_designators = 2;
+    string mim_designator = 3;
+    LogicalTimeImplementation logical_time_implementation = 4;
+}
+message CreateFederateExecutionResponse {
+    
+    enum CreateFederateExecutionResult {
+        SUCCESS = 0;
+        COULD_NOT_CREATE_LOGICAL_TIME_IMPLEMENTATION = 1;
+        COULD_NOT_LOCATE_FOM_MODULE = 2;
+        MIM_SHALL_NOT_BE_STANDARD = 3;
+        INVALID_MIM = 4;
+        COULD_NOT_LOCATE_MIM = 5;
+        EXECUTION_ALREADY_EXISTS = 6;
+        NOT_CONNECTED = 7;
+        RTI_INTERNAL_ERROR = 8;
+    }
+    CreateFederateExecutionResult result = 1;
+}
+
+service CreateFederateExecutionService {
+    rpc CreateFederateExecution(CreateFederateExecutionRequest) returns (CreateFederateExecutionResponse);
+}

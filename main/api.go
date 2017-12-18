@@ -30,6 +30,7 @@ func Setup() (bool, error) {
 	server := grpc.NewServer()
 	services := svc.CreateServices()
 	api.RegisterConnectServiceServer(server, services.(api.ConnectServiceServer))
+	api.RegisterCreateFederateExecutionServiceServer(server, services.(api.CreateFederateExecutionServiceServer))
 	// Register reflection service on gRPC server.
 	reflection.Register(server)
 
