@@ -17,15 +17,19 @@ type ConnectionClientInterceptor interface {
 }
 
 func (interceptor *connectionClientInterceptor) Handle(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
-	md, ok := metadata.FromOutgoingContext(ctx)
-	//grpc.Header()
-	if ok {
-		conns := md[services.ConnectionIDKey]
-		if conns != nil && len(conns) > 0 {
-			interceptor.connectionID = conns[0]
-		}
+	if interceptor.connectionID != "" {
+		ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs(services.ConnectionIDKey, interceptor.connectionID))
 	}
-	return nil
+	var header metadata.MD
+	opts = append(opts, grpc.Header(&header))
+	err := invoker(ctx, method, req, reply, cc, opts...)
+
+	conns := header[services.ConnectionIDKey]
+	if conns != nil && len(conns) > 0 {
+		interceptor.connectionID = conns[0]
+	}
+
+	return err
 }
 
 func CreateConnectionClientInterceptor() ConnectionClientInterceptor {
