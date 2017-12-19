@@ -13,5 +13,7 @@ func (e *engine) ConnectionManager() ConnectionManager {
 }
 
 func CreateEngine() Engine {
-	return &engine{}
+	e := &engine{}
+	e.connectionManager = CreateConnectionManager()
+	return e
 }

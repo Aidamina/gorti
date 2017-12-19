@@ -3,9 +3,6 @@ package services
 import (
 	"log"
 
-	"github.com/aidamina/gorti/engine"
-	"github.com/google/uuid"
-
 	context "golang.org/x/net/context"
 
 	"github.com/aidamina/gorti/api"
@@ -17,28 +14,6 @@ const (
 	// ConnectionIDKey contains the Connection Id Metadata Key
 	ConnectionIDKey string = "connection_id"
 )
-
-func GetConnectionID(md metadata.MD) engine.ConnectionID {
-	conns := md[ConnectionIDKey]
-	if conns != nil && len(conns) > 0 {
-		id, err := uuid.Parse(conns[0])
-		if err == nil {
-			return engine.ConnectionID(id)
-		}
-	}
-	return nil
-}
-
-func (s *services) GetConnection(ctx context.Context) engine.Connection {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		connectionID := GetConnectionID(md)
-		if connectionID != nil {
-			return s.Engine().ConnectionManager().GetConnection(connectionID)
-		}
-	}
-	return nil
-}
 
 // Connect implements api.ConnectService
 func (s *services) Connect(ctx context.Context, in *api.ConnectRequest) (*api.ConnectResponse, error) {
@@ -56,7 +31,8 @@ func (s *services) Connect(ctx context.Context, in *api.ConnectRequest) (*api.Co
 			Result: api.ConnectResponse_UNSUPPORTED_CALLBACK_MODEL,
 		}, nil
 	}
-	header := metadata.Pairs(ConnectionIDKey, "test_set_by_server")
+	connection = s.Engine().ConnectionManager().CreateConnection()
+	header := metadata.Pairs(ConnectionIDKey, connection.ID().String())
 	grpc.SendHeader(ctx, header)
 	return &api.ConnectResponse{
 		Result: api.ConnectResponse_SUCCESS,
